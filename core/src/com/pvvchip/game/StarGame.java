@@ -12,8 +12,8 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
     Texture img;
 
-    private Vector2 pos;
-    private Vector2 v;
+    private Vector2 pos, posEnd;
+    private Vector2 v, v2;
     private int yMax, xMax;
 
     @Override
@@ -27,7 +27,9 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
         img = new Texture("badlogic.jpg");
 
         pos = new Vector2(0, 0);
-        v = new Vector2(1, 0.5f);
+        posEnd = new Vector2(0, 0);
+        v = new Vector2(0, 0);
+        v2 = new Vector2(0, 0);
     }
 
     @Override
@@ -37,7 +39,13 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
         batch.begin();
         batch.draw(img, pos.x, pos.y);
         batch.end();
-        pos.add(v);
+        newPos();
+    }
+
+    private void newPos() {
+        if (pos.dst(posEnd) > 1) {
+            pos.add(v);
+        }
     }
 
     @Override
@@ -48,7 +56,22 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println("Key: " + keycode);
+//        System.out.println("Key: " + keycode);
+        switch (keycode) {
+            case 19:
+                posEnd.y += 10;
+                break;
+            case 20:
+                posEnd.y -= 10;
+                break;
+            case 21:
+                posEnd.x -= 10;
+                break;
+            case 22:
+                posEnd.x += 10;
+                break;
+        }
+        v = posEnd.cpy().sub(pos).nor();
         return false;
     }
 
@@ -64,7 +87,9 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("X: " + screenX + " : Y: " + (yMax - screenY));
+        posEnd.x = screenX;
+        posEnd.y = yMax - screenY;
+        v = posEnd.cpy().sub(pos).nor();
         return false;
     }
 
