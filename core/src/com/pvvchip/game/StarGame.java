@@ -13,15 +13,13 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
     Texture img;
 
     private Vector2 pos, posEnd;
-    private Vector2 v, v2;
-    private int yMax, xMax;
+    private Vector2 v;
+    private int yMax;
 
     @Override
     public void create() {
         Gdx.input.setInputProcessor(this);
         yMax = Gdx.graphics.getHeight();
-        xMax = Gdx.graphics.getWidth();
-
 
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
@@ -29,7 +27,6 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
         pos = new Vector2(0, 0);
         posEnd = new Vector2(0, 0);
         v = new Vector2(0, 0);
-        v2 = new Vector2(0, 0);
     }
 
     @Override
