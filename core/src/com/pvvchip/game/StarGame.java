@@ -2,11 +2,14 @@ package com.pvvchip.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+
+import static com.badlogic.gdx.Input.Keys.I;
 
 public class StarGame extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
@@ -53,18 +56,17 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-//        System.out.println("Key: " + keycode);
         switch (keycode) {
-            case 19:
+            case Input.Keys.UP:
                 posEnd.y += 10;
                 break;
-            case 20:
+            case Input.Keys.DOWN:
                 posEnd.y -= 10;
                 break;
-            case 21:
+            case Input.Keys.LEFT:
                 posEnd.x -= 10;
                 break;
-            case 22:
+            case Input.Keys.RIGHT:
                 posEnd.x += 10;
                 break;
         }
