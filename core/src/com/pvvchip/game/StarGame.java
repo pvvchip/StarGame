@@ -17,12 +17,10 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
 
     private Vector2 pos, posEnd;
     private Vector2 v;
-    private int yMax;
 
     @Override
     public void create() {
         Gdx.input.setInputProcessor(this);
-        yMax = Gdx.graphics.getHeight();
 
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
@@ -87,8 +85,9 @@ public class StarGame extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         posEnd.x = screenX;
-        posEnd.y = yMax - screenY;
-        v = posEnd.cpy().sub(pos).nor();
+        posEnd.y = Gdx.graphics.getHeight() - screenY;
+//        v = posEnd.cpy().sub(pos).nor();
+        v = posEnd.cpy().sub(pos).scl(0.01f);
         return false;
     }
 
