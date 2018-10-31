@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.pvvchip.game.base.Base2DScreen;
 import com.pvvchip.game.math.Rect;
 import com.pvvchip.game.sprite.Background;
+import com.pvvchip.game.sprite.Exit;
+import com.pvvchip.game.sprite.Play;
 
 public class MenuScreen extends Base2DScreen {
 
@@ -19,6 +21,8 @@ public class MenuScreen extends Base2DScreen {
 
     private TextureAtlas textureAtlas;
     private Star[] stars;
+    private Play play;
+    private Exit exit;
 
 
     @Override
@@ -26,6 +30,8 @@ public class MenuScreen extends Base2DScreen {
         super.show();
         bgTexture = new Texture("bg.png");
         background = new Background(new TextureRegion(bgTexture));
+        play = new Play(new TextureAtlas("menuAtlas.tpack"));
+        exit = new Exit(new TextureAtlas("menuAtlas.tpack"));
         textureAtlas = new TextureAtlas("menuAtlas.tpack");
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
@@ -52,6 +58,8 @@ public class MenuScreen extends Base2DScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.draw(batch);
+        play.draw(batch);
+        exit.draw(batch);
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
@@ -60,6 +68,7 @@ public class MenuScreen extends Base2DScreen {
 
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
+        play.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }
