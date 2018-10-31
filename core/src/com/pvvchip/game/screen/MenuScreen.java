@@ -82,7 +82,22 @@ public class MenuScreen extends Base2DScreen {
     }
 
     @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        if (play.isMe(touch))  play.setScale(1f);
+        if (exit.isMe(touch))  {
+            exit.setScale(1f);
+            //dispose();    // некоректно завершает работу ???
+            System.exit(0);
+        }
+        return super.touchUp(touch, pointer);
+    }
+
+    @Override
     public boolean touchDown(Vector2 touch, int pointer) {
+        if (play.isMe(touch))  play.setScale(0.5f);
+        if (exit.isMe(touch))  exit.setScale(0.5f);
         return false;
     }
+
+
 }
