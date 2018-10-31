@@ -8,8 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.pvvchip.game.base.Base2DScreen;
 import com.pvvchip.game.math.Rect;
-
-import static javax.swing.text.StyleConstants.Background;
+import com.pvvchip.game.sprite.Background;
 
 public class MenuScreen extends Base2DScreen {
 
@@ -28,7 +27,7 @@ public class MenuScreen extends Base2DScreen {
         bgTexture = new Texture("bg.png");
         background = new Background(new TextureRegion(bgTexture));
         textureAtlas = new TextureAtlas("menuAtlas.tpack");
-        stars =new Star[STAR_COUNT];
+        stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(textureAtlas);
         }
@@ -59,7 +58,6 @@ public class MenuScreen extends Base2DScreen {
         batch.end();
     }
 
-    @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
