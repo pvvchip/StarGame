@@ -87,7 +87,8 @@ public class MenuScreen extends Base2DScreen {
         if (exit.isMe(touch))  {
             exit.setScale(1f);
             //dispose();    // некоректно завершает работу ???
-            System.exit(0);
+           // System.exit(0);
+            Gdx.app.exit();
         }
         return super.touchUp(touch, pointer);
     }
