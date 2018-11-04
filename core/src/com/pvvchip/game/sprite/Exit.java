@@ -1,7 +1,6 @@
 package com.pvvchip.game.sprite;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pvvchip.game.base.Sprite;
 
 public class Exit extends Sprite {
