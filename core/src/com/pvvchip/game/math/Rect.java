@@ -12,6 +12,7 @@ public class Rect {
     protected float halfHeight; // половина высоты
 
 
+
     public Rect() {
 
     }
