@@ -3,57 +3,102 @@ package com.pvvchip.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.pvvchip.game.base.Base2DScreen;
-
+import com.pvvchip.game.math.Rect;
+import com.pvvchip.game.sprite.Background;
+import com.pvvchip.game.sprite.Exit;
+import com.pvvchip.game.sprite.Play;
 
 public class MenuScreen extends Base2DScreen {
 
-    private Texture img;
+    private static final int STAR_COUNT = 256;
 
-    private Vector2 pos;
-    private Vector2 touch;
-    private Vector2 v;
-    private Vector2 buf;
+    private Texture bgTexture;
+    private Background background;
+
+    private TextureAtlas textureAtlas;
+    private Star[] stars;
+    private Play play;
+    private Exit exit;
 
 
     @Override
     public void show() {
         super.show();
-        img = new Texture("badlogic.jpg");
-        pos = new Vector2(0,0);
-        touch = new Vector2();
-        v = new Vector2();
-        buf = new Vector2();
+        bgTexture = new Texture("bg.png");
+        background = new Background(new TextureRegion(bgTexture));
+        play = new Play(new TextureAtlas("menuAtlas.tpack"));
+        exit = new Exit(new TextureAtlas("menuAtlas.tpack"));
+        textureAtlas = new TextureAtlas("menuAtlas.tpack");
+        stars = new Star[STAR_COUNT];
+        for (int i = 0; i < stars.length; i++) {
+            stars[i] = new Star(textureAtlas);
+        }
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        update(delta);
+        draw();
+
+    }
+
+    public void update(float delta) {
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].update(delta);
+        }
+    }
+
+    public void draw() {
         Gdx.gl.glClearColor(0.128f, 0.53f, 0.9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        buf.set(touch);
-        if (buf.sub(pos).len() > v.len()) {
-            pos.add(v);
-        } else {
-            pos.set(touch);
-        }
         batch.begin();
-        batch.draw(img, pos.x, pos.y, 0.5f, 0.5f);
+        background.draw(batch);
+        play.draw(batch);
+        exit.draw(batch);
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].draw(batch);
+        }
         batch.end();
+    }
 
+    public void resize(Rect worldBounds) {
+        background.resize(worldBounds);
+        play.resize(worldBounds);
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].resize(worldBounds);
+        }
     }
 
     @Override
     public void dispose() {
-        img.dispose();
+        bgTexture.dispose();
+        textureAtlas.dispose();
         super.dispose();
     }
 
     @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        if (play.isMe(touch))  play.setScale(1f);
+        if (exit.isMe(touch))  {
+            exit.setScale(1f);
+            //dispose();    // некоректно завершает работу ???
+           // System.exit(0);
+            Gdx.app.exit();
+        }
+        return super.touchUp(touch, pointer);
+    }
+
+    @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        this.touch = touch;
-        v.set(touch.cpy().sub(pos).scl(0.01f));
+        if (play.isMe(touch))  play.setScale(0.5f);
+        if (exit.isMe(touch))  exit.setScale(0.5f);
         return false;
     }
+
+
 }
