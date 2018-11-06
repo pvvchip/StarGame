@@ -1,6 +1,7 @@
 package com.pvvchip.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -25,6 +26,7 @@ public class GameScreen extends Base2DScreen {
     private MainShip mainShip;
 
     private BulletPool bulletPool;
+    private Music music;
 
     @Override
     public void show() {
@@ -38,6 +40,8 @@ public class GameScreen extends Base2DScreen {
         }
         bulletPool = new BulletPool();
         mainShip = new MainShip(textureAtlas, bulletPool);
+        music = Gdx.audio.newMusic(Gdx.files.internal("backmusic.mp3"));
+        music.play();
     }
 
     @Override
@@ -91,6 +95,7 @@ public class GameScreen extends Base2DScreen {
     public void dispose() {
         bgTexture.dispose();
         textureAtlas.dispose();
+        music.dispose();
         super.dispose();
     }
 
