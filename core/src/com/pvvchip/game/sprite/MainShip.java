@@ -78,6 +78,9 @@ public class MainShip extends Sprite {
                 stop();
             }
         }
+        if (isMe(touch)) {
+            shoot();
+        }
         return false;
         //return super.touchUp(touch, pointer);
     }

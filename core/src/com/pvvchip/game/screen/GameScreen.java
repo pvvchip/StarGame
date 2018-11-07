@@ -41,6 +41,8 @@ public class GameScreen extends Base2DScreen {
         bulletPool = new BulletPool();
         mainShip = new MainShip(textureAtlas, bulletPool);
         music = Gdx.audio.newMusic(Gdx.files.internal("backmusic.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.75f);
         music.play();
     }
 
