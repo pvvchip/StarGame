@@ -102,7 +102,6 @@ public class MainShip extends Sprite {
         return false;
     }
 
-
     public boolean keyUp(int keycode) {
         switch (keycode) {
             case Input.Keys.A:
@@ -146,5 +145,9 @@ public class MainShip extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, atlas.findRegion("bulletMainShip"), pos, new Vector2(0, 0.5f), 0.01f, worldBounds, 1);
         soundShoot.play();
+    }
+
+    public void disoose() {
+        soundShoot.dispose();
     }
 }

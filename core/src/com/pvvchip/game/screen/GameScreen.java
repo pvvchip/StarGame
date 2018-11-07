@@ -98,6 +98,7 @@ public class GameScreen extends Base2DScreen {
         bgTexture.dispose();
         textureAtlas.dispose();
         music.dispose();
+        mainShip.disoose();
         super.dispose();
     }
 
