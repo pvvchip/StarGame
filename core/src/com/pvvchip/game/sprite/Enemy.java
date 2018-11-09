@@ -22,6 +22,11 @@ public class Enemy extends Ship {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(v, delta);
+        reloadTimer +=delta;
+        if (reloadTimer >= reloadInterval) {
+            shoot();
+            reloadTimer = 0;
+        }
     }
 
     public void set(
