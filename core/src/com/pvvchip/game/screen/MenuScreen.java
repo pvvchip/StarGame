@@ -13,6 +13,7 @@ import com.pvvchip.game.math.Rect;
 import com.pvvchip.game.sprite.Background;
 import com.pvvchip.game.sprite.ButtonExit;
 import com.pvvchip.game.sprite.ButtonPlay;
+import com.pvvchip.game.sprite.Star;
 
 public class MenuScreen extends Base2DScreen implements ActionListener {
 

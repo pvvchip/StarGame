@@ -2,6 +2,7 @@ package com.pvvchip.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,8 +11,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.pvvchip.game.base.Base2DScreen;
 import com.pvvchip.game.math.Rect;
 import com.pvvchip.game.pool.BulletPool;
+import com.pvvchip.game.pool.EnemyPool;
 import com.pvvchip.game.sprite.Background;
 import com.pvvchip.game.sprite.MainShip;
+import com.pvvchip.game.sprite.Star;
+import com.pvvchip.game.utils.EnemiesEmmiter;
 
 public class GameScreen extends Base2DScreen {
 
@@ -26,23 +30,35 @@ public class GameScreen extends Base2DScreen {
     private MainShip mainShip;
 
     private BulletPool bulletPool;
+
+    private Sound laserSound;
+    private Sound bulletSound;
     private Music music;
+
+    private EnemyPool enemyPool;
+    private EnemiesEmmiter enemiesEmmiter;
 
     @Override
     public void show() {
         super.show();
+        laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
+
         bgTexture = new Texture("bg.png");
         background = new Background(new TextureRegion(bgTexture));
         textureAtlas = new TextureAtlas("mainAtlas.tpack");
-        stars = new Star[STAR_COUNT];
+        stars =new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(textureAtlas);
         }
         bulletPool = new BulletPool();
-        mainShip = new MainShip(textureAtlas, bulletPool);
-        music = Gdx.audio.newMusic(Gdx.files.internal("backmusic.mp3"));
+        mainShip = new MainShip(textureAtlas, bulletPool, laserSound);
+
+        enemyPool = new EnemyPool(bulletPool, worldBounds, bulletSound);
+        enemiesEmmiter = new EnemiesEmmiter(enemyPool, worldBounds, textureAtlas);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         music.setLooping(true);
-        music.setVolume(0.75f);
         music.play();
     }
 
@@ -61,6 +77,8 @@ public class GameScreen extends Base2DScreen {
         }
         mainShip.update(delta);
         bulletPool.updateActiveObjects(delta);
+        enemyPool.updateActiveObjects(delta);
+        enemiesEmmiter.generate(delta);
     }
 
     public void checkCollisions() {
@@ -81,6 +99,7 @@ public class GameScreen extends Base2DScreen {
         }
         mainShip.draw(batch);
         bulletPool.drawActiveObjects(batch);
+        enemyPool.drawActiveObjects(batch);
         batch.end();
     }
 
@@ -98,7 +117,8 @@ public class GameScreen extends Base2DScreen {
         bgTexture.dispose();
         textureAtlas.dispose();
         music.dispose();
-        mainShip.disoose();
+        laserSound.dispose();
+        bulletSound.dispose();
         super.dispose();
     }
 
