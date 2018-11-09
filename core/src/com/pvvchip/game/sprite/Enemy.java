@@ -9,6 +9,8 @@ import com.pvvchip.game.pool.BulletPool;
 
 public class Enemy extends Ship {
 
+    private static final Vector2 vStart = new Vector2(0, -0.6f);
+
     private Vector2 v0 = new Vector2();
 
     public Enemy(BulletPool bulletPool, Rect worldBounds, Sound shootSound) {
@@ -21,8 +23,12 @@ public class Enemy extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        pos.mulAdd(v, delta);
-        reloadTimer +=delta;
+        if (pos.y > 0.5f) {
+            pos.mulAdd(vStart, delta);
+        } else {
+            pos.mulAdd(v, delta);
+        }
+        reloadTimer += delta;
         if (reloadTimer >= reloadInterval) {
             shoot();
             reloadTimer = 0;
@@ -30,15 +36,15 @@ public class Enemy extends Ship {
     }
 
     public void set(
-        TextureRegion[] regions,
-        Vector2 v0,
-        TextureRegion bulletRegion,
-        float bulletHeight,
-        float bulletVY,
-        int bulletDamage,
-        float reloadInterval,
-        float height,
-        int hp
+            TextureRegion[] regions,
+            Vector2 v0,
+            TextureRegion bulletRegion,
+            float bulletHeight,
+            float bulletVY,
+            int bulletDamage,
+            float reloadInterval,
+            float height,
+            int hp
     ) {
         this.regions = regions;
         this.v0.set(v0);
