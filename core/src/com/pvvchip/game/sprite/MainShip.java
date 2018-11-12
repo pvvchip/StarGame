@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.pvvchip.game.base.Ship;
 import com.pvvchip.game.math.Rect;
 import com.pvvchip.game.pool.BulletPool;
+import com.pvvchip.game.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
@@ -20,7 +21,7 @@ public class MainShip extends Ship {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2, shootSound);
         setHeightProportion(0.15f);
         this.bulletPool = bulletPool;
@@ -29,10 +30,13 @@ public class MainShip extends Ship {
         this.bulletDamage = 1;
         this.reloadInterval = 0.2f;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.explosionPool = explosionPool;
+        this.hp = 100;
     }
 
     @Override
     public void update(float delta) {
+        super.update(delta);
         pos.mulAdd(v, delta);
         reloadTimer += delta;
         if (reloadTimer >= reloadInterval) {
@@ -146,4 +150,18 @@ public class MainShip extends Ship {
         v.setZero();
     }
 
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() <getBottom()
+        );
+    }
+
+    @Override
+    public void destroy() {
+        boom();
+        hp = 0;
+        super.destroy();
+    }
 }
