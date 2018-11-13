@@ -84,11 +84,14 @@ public class GameScreen extends Base2DScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
-        mainShip.update(delta);
-        bulletPool.updateActiveObjects(delta);
-        enemyPool.updateActiveObjects(delta);
-        explosionPool.updateActiveObjects(delta);
-        enemiesEmmiter.generate(delta);
+
+        if (!mainShip.isDestroyed()) {
+            mainShip.update(delta);
+            bulletPool.updateActiveObjects(delta);
+            enemyPool.updateActiveObjects(delta);
+            explosionPool.updateActiveObjects(delta);
+            enemiesEmmiter.generate(delta);
+        }
     }
 
     public void checkCollisions() {
@@ -149,10 +152,11 @@ public class GameScreen extends Base2DScreen {
         }
         if (!mainShip.isDestroyed()) {
             mainShip.draw(batch);
+
+            bulletPool.drawActiveObjects(batch);
+            enemyPool.drawActiveObjects(batch);
+            explosionPool.drawActiveObjects(batch);
         }
-        bulletPool.drawActiveObjects(batch);
-        enemyPool.drawActiveObjects(batch);
-        explosionPool.drawActiveObjects(batch);
         batch.end();
     }
 
