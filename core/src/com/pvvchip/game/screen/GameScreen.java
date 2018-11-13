@@ -16,6 +16,7 @@ import com.pvvchip.game.pool.ExplosionPool;
 import com.pvvchip.game.sprite.Background;
 import com.pvvchip.game.sprite.Bullet;
 import com.pvvchip.game.sprite.Enemy;
+import com.pvvchip.game.sprite.GameOver;
 import com.pvvchip.game.sprite.MainShip;
 import com.pvvchip.game.sprite.Star;
 import com.pvvchip.game.utils.EnemiesEmmiter;
@@ -33,6 +34,7 @@ public class GameScreen extends Base2DScreen {
     private Star[] stars;
 
     private MainShip mainShip;
+    private GameOver gameOver;
 
     private BulletPool bulletPool;
 
@@ -62,6 +64,7 @@ public class GameScreen extends Base2DScreen {
         explosionPool = new ExplosionPool(textureAtlas, explosionSound);
         bulletPool = new BulletPool();
         mainShip = new MainShip(textureAtlas, bulletPool, explosionPool, laserSound);
+        gameOver = new GameOver(textureAtlas);
 
         enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds, bulletSound);
         enemiesEmmiter = new EnemiesEmmiter(enemyPool, worldBounds, textureAtlas);
@@ -84,7 +87,6 @@ public class GameScreen extends Base2DScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
-
         if (!mainShip.isDestroyed()) {
             mainShip.update(delta);
             bulletPool.updateActiveObjects(delta);
@@ -156,7 +158,7 @@ public class GameScreen extends Base2DScreen {
             bulletPool.drawActiveObjects(batch);
             enemyPool.drawActiveObjects(batch);
             explosionPool.drawActiveObjects(batch);
-        }
+        } else gameOver.draw(batch);
         batch.end();
     }
 
@@ -167,6 +169,7 @@ public class GameScreen extends Base2DScreen {
             stars[i].resize(worldBounds);
         }
         mainShip.resize(worldBounds);
+
     }
 
     @Override
