@@ -6,16 +6,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.pvvchip.game.base.Ship;
 import com.pvvchip.game.math.Rect;
 import com.pvvchip.game.pool.BulletPool;
+import com.pvvchip.game.pool.ExplosionPool;
 
 public class Enemy extends Ship {
 
-    private static final Vector2 vStart = new Vector2(0, -0.6f);
+    private enum State { DESCENT, FIGHT }
 
     private Vector2 v0 = new Vector2();
 
-    public Enemy(BulletPool bulletPool, Rect worldBounds, Sound shootSound) {
+    private State state;
+    private Vector2 descentV = new Vector2(0, -0.15f);
+
+    public Enemy(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
         super(shootSound);
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         this.v.set(v0);
     }
@@ -23,28 +28,39 @@ public class Enemy extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if (pos.y > 0.5f) {
-            pos.mulAdd(vStart, delta);
-        } else {
-            pos.mulAdd(v, delta);
-        }
-        reloadTimer += delta;
-        if (reloadTimer >= reloadInterval) {
-            shoot();
-            reloadTimer = 0;
+        pos.mulAdd(v, delta);
+
+        switch (state) {
+            case DESCENT:
+                if (getTop() <= worldBounds.getTop()) {
+                    v.set(v0);
+                    state = State.FIGHT;
+                }
+                break;
+            case FIGHT:
+                reloadTimer += delta;
+                if (reloadTimer >= reloadInterval) {
+                    shoot();
+                    reloadTimer = 0f;
+                }
+                if (getBottom() < worldBounds.getBottom()) {
+                    boom();
+                    destroy();
+                }
+                break;
         }
     }
 
     public void set(
-            TextureRegion[] regions,
-            Vector2 v0,
-            TextureRegion bulletRegion,
-            float bulletHeight,
-            float bulletVY,
-            int bulletDamage,
-            float reloadInterval,
-            float height,
-            int hp
+        TextureRegion[] regions,
+        Vector2 v0,
+        TextureRegion bulletRegion,
+        float bulletHeight,
+        float bulletVY,
+        int bulletDamage,
+        float reloadInterval,
+        float height,
+        int hp
     ) {
         this.regions = regions;
         this.v0.set(v0);
@@ -54,7 +70,24 @@ public class Enemy extends Ship {
         this.bulletDamage = bulletDamage;
         this.reloadInterval = reloadInterval;
         this.hp = hp;
+        this.reloadTimer = reloadInterval;
         setHeightProportion(height);
-        v.set(v0);
+        v.set(descentV);
+        state = State.DESCENT;
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > getTop()
+                || bullet.getTop() < pos.y
+        );
+    }
+
+    @Override
+    public void destroy() {
+        boom();
+        hp = 0;
+        super.destroy();
     }
 }
