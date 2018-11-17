@@ -92,8 +92,8 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         messageGameOver = new MessageGameOver(textureAtlas);
         buttonNewGame = new ButtonNewGame(textureAtlas, this);
 
-        font = new Font("font/font.fnt", "font/font.png");
-        font.setFontSize(0.02f);
+        font = new Font("font/purisa.fnt", "font/purisa.png");
+        font.setFontSize(0.04f);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         music.setLooping(true);
